@@ -10,6 +10,13 @@ export interface LiftConnection {
     createdAt: Date;
 }
 
+export interface SponsoredRide {
+    donor: Types.ObjectId;
+    sponsor: Types.ObjectId;
+    transactionId: string;
+    sponsoredAt: Date;
+}
+
 export interface Interactions {
     going: Types.ObjectId[];
     interested: Types.ObjectId[];
@@ -29,7 +36,9 @@ export interface IPost {
     notes?: string;
     status: PostStatus;
     interactions: Interactions;
+    sponsoredRides: SponsoredRide[];
     createdAt?: Date;
     updatedAt?: Date;
     expiresAt?: Date;
 }
+

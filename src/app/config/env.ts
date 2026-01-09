@@ -12,6 +12,10 @@ interface EnvConfig {
     JWT_REFRESH_SECRET: string;
     JWT_REFRESH_EXPIRES: string;
     FRONTEND_URL: string;
+    // SSLCommerz
+    SSLCOMMERZ_STORE_ID: string;
+    SSLCOMMERZ_STORE_PASSWORD: string;
+    SSLCOMMERZ_IS_LIVE: boolean;
 }
 
 const loadEnvVariables = (): EnvConfig => {
@@ -24,7 +28,9 @@ const loadEnvVariables = (): EnvConfig => {
         "JWT_ACCESS_EXPIRES",
         "JWT_REFRESH_SECRET",
         "JWT_REFRESH_EXPIRES",
-        "FRONTEND_URL"
+        "FRONTEND_URL",
+        "SSLCOMMERZ_STORE_ID",
+        "SSLCOMMERZ_STORE_PASSWORD"
     ];
 
     requiredEnvVariables.forEach(key => {
@@ -43,7 +49,11 @@ const loadEnvVariables = (): EnvConfig => {
         JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET as string,
         JWT_REFRESH_EXPIRES: process.env.JWT_REFRESH_EXPIRES as string,
         FRONTEND_URL: process.env.FRONTEND_URL as string,
+        SSLCOMMERZ_STORE_ID: process.env.SSLCOMMERZ_STORE_ID as string,
+        SSLCOMMERZ_STORE_PASSWORD: process.env.SSLCOMMERZ_STORE_PASSWORD as string,
+        SSLCOMMERZ_IS_LIVE: process.env.SSLCOMMERZ_IS_LIVE === "true",
     };
 };
 
 export const envVars = loadEnvVariables();
+

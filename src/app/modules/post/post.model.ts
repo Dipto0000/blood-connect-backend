@@ -80,7 +80,27 @@ const postSchema = new Schema<IPost>({
     },
     expiresAt: {
         type: Date
-    }
+    },
+    sponsoredRides: [{
+        donor: {
+            type: Schema.Types.ObjectId,
+            ref: "User",
+            required: true
+        },
+        sponsor: {
+            type: Schema.Types.ObjectId,
+            ref: "User",
+            required: true
+        },
+        transactionId: {
+            type: String,
+            required: true
+        },
+        sponsoredAt: {
+            type: Date,
+            default: Date.now
+        }
+    }]
 }, {
     timestamps: true
 });
