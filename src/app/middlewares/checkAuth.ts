@@ -9,11 +9,13 @@ import { verifyToken } from "../utils/jwt";
 
 export const checkAuth = (...authRoles: string[]) => async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const accessToken = req.headers.authorization;
+        const token = req.headers.authorization;
 
-        if (!accessToken) {
+        if (!token) {
             throw new AppError(httpStatus.FORBIDDEN, "No Token Received");
         }
+
+        const accessToken = token.startsWith('Bearer ') ? token.split(' ')[1] : token;
 
         const verifiedToken = verifyToken(accessToken, envVars.JWT_ACCESS_SECRET) as JwtPayload;
 
