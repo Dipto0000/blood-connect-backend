@@ -3,16 +3,27 @@ import httpStatus from "http-status-codes";
 import { JwtPayload } from "jsonwebtoken";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
+import { setAuthCookie } from "../../utils/setCookie";
 import { UserService } from "./user.service";
 
 const createUser = catchAsync(async (req: Request, res: Response) => {
-    const user = await UserService.createUser(req.body);
+    const result = await UserService.createUser(req.body);
+
+    // Set auth cookies for auto-login
+    setAuthCookie(res, {
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken
+    });
 
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.CREATED,
-        message: "User created successfully",
-        data: user
+        message: "User registered and logged in successfully",
+        data: {
+            accessToken: result.accessToken,
+            refreshToken: result.refreshToken,
+            user: result.user
+        }
     });
 });
 

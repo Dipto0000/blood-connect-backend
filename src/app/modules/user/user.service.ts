@@ -6,6 +6,8 @@ import AppError from "../../errorHelpers/AppError";
 import { IUser, Role } from "./user.interface";
 import { User } from "./user.model";
 
+import { createUserTokens } from "../../utils/userTokens";
+
 const createUser = async (payload: Partial<IUser>) => {
     const { email, password, ...rest } = payload;
 
@@ -20,10 +22,21 @@ const createUser = async (payload: Partial<IUser>) => {
     const user = await User.create({
         email,
         password: hashedPassword,
+        isVerified: true,   // Auto-verify new users for immediate login
         ...rest
     });
 
-    return user;
+    // Generate tokens for auto-login
+    const tokens = createUserTokens(user);
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: _, ...userWithoutPassword } = user.toObject();
+
+    return {
+        user: userWithoutPassword,
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken
+    };
 };
 
 const updateUser = async (userId: string, payload: Partial<IUser>, decodedToken: JwtPayload) => {
